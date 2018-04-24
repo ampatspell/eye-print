@@ -1,13 +1,14 @@
 import Component from '@ember/component';
 import { Promise } from 'rsvp';
 import { computed } from '@ember/object';
+import { next } from '@ember/runloop';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route', ':ui-route-index' ],
 
   actions: {
-    run() {
-      this.capture();
+    print() {
+      this.print();
     }
   },
 
@@ -17,17 +18,17 @@ export default Component.extend({
   },
 
   capture() {
-    this.state.capture().promise.then(frame => {
-      if(this.isDestroying) {
-        return;
-      }
-      this.set('frame', frame);
-      return this.print(frame);
+    next(() => {
+      this.state.capture().promise.then(frame => {
+        this.set('frame', frame);
+        next(() => this.capture());
+      });
     });
   },
 
-  async print(frame) {
-    let blob = frame.get('blob');
+  async print() {
+    let frame = this.frame;
+    let blob = frame.blob;
     this.state.printer.schedule(async printer => {
       await printer.image(blob);
     });

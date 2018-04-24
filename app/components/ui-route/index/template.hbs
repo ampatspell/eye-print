@@ -1,13 +1,6 @@
-{{#if frame}}
-  <div class="preview">
-    <img src="{{frame.url}}">
-  </div>
-{{/if}}
-
-<div class="scale">
-  {{ui-route/index/webcam
-      class='webcam'
-      stream=state.stream
-      click=(action 'run')
-  }}
+<div class="content">
+  {{#if frame}}
+    <img class="preview" src="{{frame.url}}">
+    <div class="print" {{action 'print' bubbles=false}}>Join</div>
+  {{/if}}
 </div>
