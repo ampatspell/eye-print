@@ -1,5 +1,5 @@
 import EmberObject, { computed } from '@ember/object';
-import { resolve } from 'rsvp';
+import { all } from 'rsvp';
 
 export default EmberObject.extend({
 
@@ -7,10 +7,15 @@ export default EmberObject.extend({
     return this.models.create('stream');
   }).readOnly(),
 
+  printer: computed(function() {
+    return this.models.create('printer');
+  }).readOnly(),
+
   ready() {
-    return this.stream.ready.catch(err => {
-      console.log(err);
-    });
+    return all([
+      this.stream.ready.catch(err => console.log(err)),
+      this.printer.ready.catch(err => console.log(err))
+    ]).then(() => this);
   },
 
   capture() {
