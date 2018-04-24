@@ -1,0 +1,13 @@
+{{#if frame}}
+  <div class="preview">
+    <img src="{{frame.url}}">
+  </div>
+{{/if}}
+
+<div class="scale">
+  {{ui-route/index/webcam
+      class='webcam'
+      stream=state.stream
+      click=(action 'run')
+  }}
+</div>

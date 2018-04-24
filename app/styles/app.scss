@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+$font-family: 'Raleway', sans-serif;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-family;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.ui-route-index {
+  padding: 50px;
+  > .scale {
+    position: relative;
+    width: 640px;
+    height: 480px;
+    overflow: hidden;
+    > .webcam {
+      transform-origin: center;
+      transform: scale(10);
+    }
+  }
+  > .preview {
+    margin: 50px 0;
+    > img {
+      background: rgba(255, 0, 0, 0.1);
+    }
+  }
+}
