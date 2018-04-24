@@ -16,6 +16,8 @@ export default Frame.extend({
   },
 
   render({ ctx, size: { width, height }, picture }) {
+    ctx.translate(width, 0);
+    ctx.scale(-1, 1);
     ctx.drawImage(this.picture(picture, width), 0, 0);
   }
 
