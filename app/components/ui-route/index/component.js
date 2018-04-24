@@ -1,9 +1,12 @@
 import Component from '@ember/component';
 import { Promise } from 'rsvp';
 import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route', ':ui-route-index' ],
+
+  printer: service(),
 
   actions: {
     run() {
@@ -22,6 +25,15 @@ export default Component.extend({
         return;
       }
       this.set('frame', frame);
+      return this.print(frame);
+    });
+  },
+
+  print(frame) {
+    console.log(frame);
+    let blob = frame.get('blob');
+    this.printer.schedule(print => {
+      print.text('Electron');
     });
   }
 
