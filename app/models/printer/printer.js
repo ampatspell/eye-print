@@ -1,5 +1,6 @@
 import EmberObject from '@ember/object';
 import Mixin from '@ember/object/mixin';
+import { Promise } from 'rsvp';
 
 const names = [ 'flush', 'print', 'text', 'encode', 'font', 'style', 'align', 'size', 'feed' ];
 
@@ -37,6 +38,23 @@ export default EmberObject.extend(ForwardMixin, {
     await this.style('normal');
     await this.size(1, 1);
     await this.align('lt');
-  }
+  },
+
+  async image(blob) {
+    const blobToBuffer = async blob => new Promise(resolve => {
+      let reader = new FileReader();
+      reader.onload = () => resolve(Buffer.from(reader.result));
+      reader.readAsArrayBuffer(blob);
+    });
+
+    const PNGBufferToImage = buffer => new Promise(resolve => {
+      this.escpos.Image.load(buffer, 'image/png', image => resolve(image));
+    });
+
+    let buffer = await blobToBuffer(blob);
+    let image = await PNGBufferToImage(buffer);
+
+    await this.printer.image(image);
+  },
 
 });

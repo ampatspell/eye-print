@@ -26,11 +26,11 @@ export default Component.extend({
     });
   },
 
-  print(frame) {
+  async print(frame) {
     let blob = frame.get('blob');
-    // this.state.printer.schedule(printer => {
-    //   printer.text('Electron');
-    // });
+    this.state.printer.schedule(async printer => {
+      await printer.image(blob);
+    });
   }
 
 });

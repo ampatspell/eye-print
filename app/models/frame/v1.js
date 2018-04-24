@@ -37,12 +37,20 @@ const withPixels = (pixels, cb) => {
 
 const grayscale = pixels => withPixels(pixels, pixel => {
   let v = 0.7 * pixel.r + 0.5 * pixel.g + 0.5 * pixel.b;
-  pixel.r = v;
-  pixel.g = v;
-  pixel.b = v;
+  if(v > 128) {
+    pixel.r = 0;
+    pixel.g = 0;
+    pixel.b = 0;
+    pixel.a = 255;
+  } else {
+    pixel.a = 0;
+  }
 });
 
 const dotted = pixels => withPixels(pixels, pixel => {
+  if(pixel.a === 0) {
+    return;
+  }
   pixel.a = pixel.y % 2 === 0 || pixel.x % 2 !== 0 ? 255 : 0;
 });
 
