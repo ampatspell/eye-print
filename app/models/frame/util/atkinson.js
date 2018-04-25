@@ -48,7 +48,7 @@ export default (picture, width, zoom) => {
   ctx.drawImage(picture, ox, oy, zw, zh);
 
   let pixels = ctx.getImageData(0, 0, w, h);
-  pixels = lumninance(pixels, 0.3, 0.5, 0.2, 5);
+  pixels = lumninance(pixels, 0.2, 0.5, 0.2, 5);
   pixels = atkinson(pixels);
   ctx.putImageData(pixels, 0, 0);
 
