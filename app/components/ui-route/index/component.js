@@ -1,7 +1,5 @@
 import Component from '@ember/component';
-import { Promise } from 'rsvp';
 import { computed } from '@ember/object';
-import { next } from '@ember/runloop';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route', ':ui-route-index' ],

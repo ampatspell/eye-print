@@ -1,6 +1,5 @@
 import EmberObject, { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
-import serverTimestamp from 'ember-cli-zuglet/util/server-timestamp';
 
 const sentencer = requireNode('sentencer');
 
@@ -26,7 +25,7 @@ export default EmberObject.extend({
     return pad(this.identifier, 10);
   }).readOnly(),
 
-  async build(previous) {
+  async build() {
     let now = new Date();
 
     let identifier = this.get('state.last.content.data.identifier');
@@ -70,7 +69,7 @@ export default EmberObject.extend({
       metadata: {}
     });
     await task.promise;
-    
+
     doc.set('data.image_url', task.downloadURL);
     await doc.save();
   },

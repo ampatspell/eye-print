@@ -1,8 +1,8 @@
 import { Promise } from 'rsvp';
 
 export default {
-  name: 'eye-print',
-  after: 'eye-print:store',
+  name: 'identity:setup',
+  after: 'identity:store',
   initialize(app) {
     window.Promise = Promise;
 

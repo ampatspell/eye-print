@@ -25,6 +25,6 @@ module.exports = {
   },
   "windowsStoreConfig": {
     "packageName": "",
-    "name": "eyeprint"
+    "name": "identity"
   }
 };

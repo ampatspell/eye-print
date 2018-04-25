@@ -1,6 +1,6 @@
 // https://github.com/gazs/canvas-atkinson-dither/blob/master/worker.coffee
 const lumninance = (pixels, r, g, b) => {
-  let { data, width } = pixels;
+  let data = pixels.data;
   let len = data.length;
   for(let i = 0; i < len; i += 4) {
     let v = parseInt(data[i] * r + data[i + 1] * g + data[i + 2] * b, 10);

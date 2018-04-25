@@ -2,7 +2,7 @@
 
 module.exports = function(environment) {
   let ENV = {
-    modulePrefix: 'eye-print',
+    modulePrefix: 'identity',
     environment,
     rootURL: '/',
     locationType: 'auto',

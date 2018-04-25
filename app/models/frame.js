@@ -1,6 +1,5 @@
 import EmberObject, { computed } from '@ember/object';
-import { Promise, hash, resolve, reject } from 'rsvp';
-import { assign } from '@ember/polyfills';
+import { Promise, resolve, reject } from 'rsvp';
 
 export default EmberObject.extend({
 

@@ -1,6 +1,5 @@
 import Mixin from '@ember/object/mixin';
 import { computed } from '@ember/object';
-import { join } from '@ember/runloop';
 import { defer } from 'rsvp';
 import { readOnly } from '@ember/object/computed';
 
@@ -67,7 +66,6 @@ export default Mixin.create({
   },
 
   _stop() {
-    console.log('_stop', this+'');
   },
 
   willDestroy() {
