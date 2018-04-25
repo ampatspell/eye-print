@@ -18,16 +18,6 @@ export default Frame.extend({
     return pic.height;
   },
 
-  renderId(o) {
-    let { ctx, details } = this;
-
-    ctx.fillStyle = '#000';
-    ctx.textAlign = 'right';
-
-    ctx.font = 'bold 50px Roboto Mono';
-    ctx.fillText(details.id, this.size.width, o + 10);
-  },
-
   renderDetails() {
     let { ctx, details } = this;
 
@@ -35,13 +25,13 @@ export default Frame.extend({
     ctx.textAlign = 'left';
 
     ctx.font = 'bold 23px Roboto Mono';
-    ctx.fillText(`#${details.identifier}`, 0, 14);
+    ctx.fillText(`#${details.identifierString}`, 0, 14);
 
     ctx.font = '23px Roboto Mono';
     ctx.fillText(details.description, 0, 35);
 
     ctx.font = 'bold 21px Roboto Mono';
-    ctx.fillText(details.date, 0, 50);
+    ctx.fillText(details.nowString, 0, 50);
 
     ctx.font = 'bold 26px Roboto Mono';
     ctx.textAlign = 'center';
@@ -52,8 +42,6 @@ export default Frame.extend({
     let ctx = this.ctx;
 
     let o = this.renderPicture();
-
-    this.renderId(o);
 
     ctx.translate(0, o);
     this.renderDetails();

@@ -1,7 +1,14 @@
 import EmberObject, { computed } from '@ember/object';
-import { all } from 'rsvp';
+import { all, resolve } from 'rsvp';
+import { inject as service } from '@ember/service';
 
 export default EmberObject.extend({
+
+  store: service(),
+
+  last: computed(function() {
+    return this.store.collection('identities').orderBy('identifier', 'desc').query({ type: 'first' });
+  }).readOnly(),
 
   stream: computed(function() {
     return this.models.create('stream');
@@ -12,10 +19,15 @@ export default EmberObject.extend({
   }).readOnly(),
 
   ready() {
-    return all([
-      this.stream.ready.catch(err => console.log(err)),
-      this.printer.ready.catch(err => console.log(err))
-    ]).then(() => this);
+    return resolve()
+      .then(() => this.store.ready)
+      .then(() => all([
+        this.last.load(),
+        this.stream.ready.catch(err => console.log(err)),
+        this.printer.ready.catch(err => console.log(err))
+      ])).then(() => {
+        this.last.observe();
+      }).then(() => this);
   },
 
   captureFrame() {
@@ -29,12 +41,17 @@ export default EmberObject.extend({
     return model;
   },
 
+  async recreateDetails() {
+    let details = this.models.create('details', { state: this });
+    await details.build();
+    this.details = details;
+    return details;
+  },
+
   async createPreviewFrame() {
     let details = this.details;
     if(!details) {
-      details = this.models.create('details');
-      await details.build();
-      this.details = details;
+      details = await this.recreateDetails();
     }
     return await this.createFrame(details);
   },
@@ -52,6 +69,7 @@ export default EmberObject.extend({
       await printer.image(frame.blob);
       await printer.feed(3);
     });
+    await this.recreateDetails();
   }
 
 });
