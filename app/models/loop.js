@@ -1,6 +1,6 @@
 import EmberObject from '@ember/object';
 import { gt } from '@ember/object/computed';
-import { next, later } from '@ember/runloop';
+import { later } from '@ember/runloop';
 import { resolve, defer } from 'rsvp';
 
 export default EmberObject.extend({
@@ -15,29 +15,35 @@ export default EmberObject.extend({
   },
 
   schedule() {
-    next(() => {
+    later(() => {
       if(this.isDestroying || this.suspends > 0) {
         return;
       }
-      resolve(this.fn()).catch(() => {}).finally(() => this.schedule());
-    });
+      this.current = resolve(this.fn())
+        .catch(() => {})
+        .finally(() => this.schedule());
+    }, 0);
   },
 
   start() {
     this.schedule();
   },
 
-  suspend() {
+  async suspend() {
     let suspends = this.suspends + 1;
     this.set('suspends', suspends);
 
     let invoked = false;
     let deferred = defer();
 
+    await this.current;
+
     return delay => {
+
       if(invoked) {
         return;
       }
+
       invoked = true;
 
       later(() => {

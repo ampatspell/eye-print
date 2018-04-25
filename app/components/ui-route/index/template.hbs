@@ -1,6 +1,6 @@
 <div class="content">
   {{#if frame}}
     <img class="preview" src="{{frame.url}}">
-    <div class="print" {{action 'print' bubbles=false}}>Join</div>
+    <button class="print" disabled={{loop.isSuspended}} {{action 'print' bubbles=false}}>&nbsp;</button>
   {{/if}}
 </div>

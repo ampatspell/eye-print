@@ -7,7 +7,7 @@ export default Component.extend({
   classNameBindings: [ ':ui-route', ':ui-route-index' ],
 
   loop: computed(function() {
-    let fn = () => this.capture();
+    let fn = () => this.preview();
     return this.models.create('loop', { fn });
   }).readOnly(),
 
@@ -30,24 +30,29 @@ export default Component.extend({
     this.loop.destroy();
   },
 
-  capture() {
-    return this.state.capture().promise.then(frame => {
-      if(this.isDestroying) {
-        return;
-      }
-      this.set('frame', frame);
-    });
+  async preview() {
+    let frame = await this.state.createPreviewFrame();
+
+    if(this.isDestroying) {
+      return;
+    }
+
+    this.set('frame', frame);
   },
 
   async print() {
-    let enable = this.loop.suspend();
-    let frame = this.frame;
-    let blob = frame.blob;
-    this.state.printer.schedule(async printer => {
-      await printer.image(blob);
-      await printer.flush();
-      await enable(3000);
-    });
+    let resume = await this.loop.suspend();
+    let frame = await this.state.createPrintFrame();
+
+    if(this.isDestroying) {
+      return;
+    }
+
+    this.set('frame', frame);
+
+    await this.state.printFrame(frame);
+
+    resume(5000);
   }
 
 });

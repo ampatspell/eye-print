@@ -1,5 +1,5 @@
 import EmberObject, { computed } from '@ember/object';
-import { Promise, hash, resolve } from 'rsvp';
+import { Promise, hash, resolve, reject } from 'rsvp';
 import { assign } from '@ember/polyfills';
 
 export default EmberObject.extend({
@@ -23,28 +23,31 @@ export default EmberObject.extend({
     return new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/png'))
   },
 
-  createBlob(hash) {
+  createBlob() {
     let width = 384;
-    let height = 400;
+    let height = 380;
 
     let canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
 
-    let ctx = canvas.getContext('2d');
-    let size = { width, height };
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.size = { width, height };
 
     return resolve()
-      .then(() => this.render(assign({ ctx, size }, hash)))
+      .then(() => this.render())
       .then(() => this.canvasToBlob(canvas));
   },
 
   invoke() {
     return resolve()
-      .then(() => hash(this.load()))
-      .then(hash => this.createBlob(hash))
+      .then(() => this.createBlob())
       .then(blob => this.set('blob', blob))
-      .then(() => this);
+      .then(() => this, err => {
+        console.log(err);
+        return reject(err);
+      });
   }
 
 });

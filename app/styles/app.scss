@@ -1,6 +1,6 @@
-// https://fonts.google.com/specimen/Raleway?selection.family=Raleway:400,700
-@import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
-$font-family: 'Raleway', sans-serif;
+// https://fonts.google.com/specimen/Roboto+Mono?selection.family=Roboto+Mono:400,700
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:400,700&subset=latin-ext');
+$font-family: 'Roboto Mono', monospace;
 
 body {
   margin: 0;
@@ -34,16 +34,26 @@ body > .ember-view {
       image-rendering: pixelated;
       display: block;
       width: 100%;
+      margin-bottom: 30px;
     }
     > .print {
+      font-family: $font-family;
+      -webkit-appearance: none;
+      display: block;
+      width: 100%;
+      border: none;
+      outline: none;
       background: #000;
       color: #fff;
       border-radius: 4px;
       text-align: center;
-      padding: 10px 0;
+      padding: 15px 0;
       font-size: 18px;
-      cursor: pointer;
-      font-weight: 400;
+      font-weight: 600;
+      transition: opacity 0.2s ease-in-out;
+      &:disabled {
+        opacity: 0.75;
+      }
     }
   }
 }
