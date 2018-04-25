@@ -1,9 +1,12 @@
 // https://github.com/gazs/canvas-atkinson-dither/blob/master/worker.coffee
-const lumninance = (pixels, r, g, b) => {
+const lumninance = (pixels, r, g, b, contrast) => {
   let data = pixels.data;
   let len = data.length;
+  let factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
   for(let i = 0; i < len; i += 4) {
-    let v = parseInt(data[i] * r + data[i + 1] * g + data[i + 2] * b, 10);
+    let v = data[i] * r + data[i + 1] * g + data[i + 2] * b;
+    v = parseInt(v, 10);
+    v = factor * (v - 128) + 128;
     data[i] = data[i + 1] = data[i + 2] = v;
   }
   return pixels;
@@ -45,7 +48,7 @@ export default (picture, width, zoom) => {
   ctx.drawImage(picture, ox, oy, zw, zh);
 
   let pixels = ctx.getImageData(0, 0, w, h);
-  pixels = lumninance(pixels, 0.3, 0.59, 0.11);
+  pixels = lumninance(pixels, 0.3, 0.5, 0.2, 5);
   pixels = atkinson(pixels);
   ctx.putImageData(pixels, 0, 0);
 
